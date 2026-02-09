@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const UserList = ({ onSelectUser }) => {
+const UserList = ({ onSelectUser, onCreateUser }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers();
@@ -24,12 +26,36 @@ const UserList = ({ onSelectUser }) => {
     }
   };
 
+  const handleSelectUser = (user) => {
+    if (onSelectUser) {
+      onSelectUser(user);
+    } else {
+      navigate(`/users/${user.id}/edit`);
+    }
+  };
+
+  const handleCreateUser = () => {
+    if (onCreateUser) {
+      onCreateUser();
+    } else {
+      navigate('/users/create');
+    }
+  };
+
   if (loading) return <div className="p-4">Loading...</div>;
   if (error) return <div className="p-4">Error: {error}</div>;
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Users</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">Users</h2>
+        <button
+          onClick={handleCreateUser}
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+        >
+          Add User
+        </button>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -50,7 +76,7 @@ const UserList = ({ onSelectUser }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => onSelectUser(user)}>
+              <tr key={user.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => handleSelectUser(user)}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {user.id}
                 </td>
@@ -64,7 +90,7 @@ const UserList = ({ onSelectUser }) => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onSelectUser(user);
+                      handleSelectUser(user);
                     }}
                     className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
                   >
