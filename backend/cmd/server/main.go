@@ -23,12 +23,17 @@ func main() {
 		&models.User{},
 		&models.Profile{},
 		&models.Post{},
+		&models.Role{},
+		&models.Permission{},
+		&models.UserRole{},
+		&models.RolePermission{},
 	)
 
 	userHandler := handlers.NewUserHandler(db)
 	profileHandler := handlers.NewProfileHandler(db)
 	postHandler := handlers.NewPostHandler(db)
 	authHandler := handlers.NewAuthHandler(repositories.NewUserRepository(db))
+	rbacHandler := handlers.NewRBACController(db)
 
 	r := gin.Default()
 
@@ -51,6 +56,7 @@ func main() {
 		profileHandler,
 		postHandler,
 		*authHandler,
+		*rbacHandler,
 	)
 
 	log.Println("Server running at :8081")

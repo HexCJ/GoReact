@@ -1,14 +1,23 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ isOpen, onClose, currentUser }) => {
   const [activeItem, setActiveItem] = useState('users');
+  const navigate = useNavigate();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'users', label: 'Users', icon: '👥' },
-    { id: 'posts', label: 'Posts', icon: '📝' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' },
+    { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/' },
+    { id: 'users', label: 'Users', icon: '👥', path: '/users' },
+    { id: 'rbac', label: 'RBAC', icon: '🔐', path: '/rbac' },
+    { id: 'posts', label: 'Posts', icon: '📝', path: '/users' },
+    { id: 'settings', label: 'Settings', icon: '⚙️', path: '/users' },
   ];
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    setActiveItem(menuItems.find(item => item.path === path)?.id || '');
+    onClose(); // Close sidebar on mobile after navigation
+  };
 
   return (
     <aside
@@ -31,9 +40,9 @@ const Sidebar = ({ isOpen, onClose, currentUser }) => {
           {menuItems.map((item) => (
             <li key={item.id}>
               <button
-                onClick={() => setActiveItem(item.id)}
+                onClick={() => handleNavigation(item.path)}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 flex items-center ${
-                  activeItem === item.id
+                  window.location.pathname.startsWith(item.path)
                     ? 'bg-blue-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 }`}

@@ -3,6 +3,7 @@ import UserList from './UserList';
 import UserForm from './UserForm';
 import UserProfile from './UserProfile';
 import UserDetail from './UserDetail';
+import RBACManagement from './RBACManagement';
 
 const AppRoutes = ({ isLoggedIn }) => {
   // Protected Route Component
@@ -40,6 +41,31 @@ const AppRoutes = ({ isLoggedIn }) => {
       <Route path="/users/:id/profile" element={
         <ProtectedRoute>
           <UserProfile />
+        </ProtectedRoute>
+      } />
+      <Route path="/rbac" element={
+        <ProtectedRoute>
+          <RBACManagement />
+        </ProtectedRoute>
+      } />
+      <Route path="/rbac/roles" element={
+        <ProtectedRoute>
+          <RBACManagement />
+        </ProtectedRoute>
+      } />
+      <Route path="/rbac/permissions" element={
+        <ProtectedRoute>
+          <RBACManagement />
+        </ProtectedRoute>
+      } />
+      <Route path="/rbac/role-permissions" element={
+        <ProtectedRoute>
+          <RBACManagement />
+        </ProtectedRoute>
+      } />
+      <Route path="/rbac/user-roles" element={
+        <ProtectedRoute>
+          <RBACManagement />
         </ProtectedRoute>
       } />
     </Routes>
