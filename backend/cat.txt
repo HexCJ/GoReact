@@ -1,0 +1,46 @@
+Alur penggunaan go gin ini : 
+Handler menerima dan memproses request HTTP, lalu meneruskannya ke Service untuk validasi dan aturan bisnis, kemudian Service meminta Repository untuk mengolah data ke database melalui Model.
+
+as laravel: 
+Handler sebagai controller
+
+Alur :
+Client (curl / frontend)
+    ↓
+Handler
+- baca request
+- bind JSON
+- validasi format
+    ↓
+Service
+- aturan bisnis
+- validasi logika
+- keputusan boleh / tidak
+    ↓
+Repository
+- query database
+- insert / update / delete
+    ↓
+Database
+
+install migrate
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+buat migration
+migrate create -ext sql -dir migrations add_password_to_users
+
+migration up
+migrate -path migrations \
+  -database "postgres://postgres:postgres@localhost:5432/gingo_db?sslmode=disable" up
+
+migration down 1
+migrate -path migrations \
+  -database "postgres://postgres:postgres@localhost:5432/gingo_db?sslmode=disable" down 1
+
+migration down all
+migrate -path migrations \
+  -database "postgres://postgres:postgres@localhost:5432/gingo_db?sslmode=disable" down
+
+migration status 
+migrate -path migrations \
+  -database "postgres://postgres:postgres@localhost:5432/gingo_db?sslmode=disable" version

@@ -1,0 +1,11 @@
+/* App-specific styles */
+.header-actions {
+  margin-bottom: var(--spacer);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-actions {
+    margin-bottom: var(--spacer-sm);
+  }
+}
