@@ -1,11 +1,12 @@
 # GoReact Frontend Documentation
 
 ## Overview
-Frontend dari aplikasi GoReact adalah sebuah Single Page Application (SPA) yang dibangun menggunakan React dan Vite. Frontend ini menyediakan antarmuka pengguna yang interaktif untuk berinteraksi dengan backend API, termasuk fitur login, manajemen user, profil, dan postingan.
+Frontend dari aplikasi GoReact adalah sebuah Single Page Application (SPA) yang dibangun menggunakan React dan Vite. Frontend ini menyediakan antarmuka pengguna yang interaktif untuk berinteraksi dengan backend API, termasuk fitur login, manajemen user, profil, dan postingan. Aplikasi menggunakan React Router DOM untuk manajemen navigasi dan routing.
 
 ## Teknologi yang Digunakan
 - **React**: Library JavaScript untuk membangun UI
 - **Vite**: Build tool untuk pengembangan cepat
+- **React Router DOM**: Library untuk manajemen routing dan navigasi
 - **Tailwind CSS**: Framework CSS untuk styling
 - **localStorage**: Penyimpanan data sisi klien
 - **Fetch API**: Komunikasi HTTP dengan backend
@@ -20,11 +21,13 @@ frontend/
 │   │   │   ├── HeaderBar.jsx      # Header dengan jam & cuaca
 │   │   │   ├── Sidebar.jsx        # Sidebar navigasi
 │   │   │   └── Layout.jsx         # Layout utama
+│   │   ├── AppRoutes.jsx          # Definisi route aplikasi
 │   │   ├── Login.jsx              # Halaman login
 │   │   ├── UserList.jsx           # Daftar user
 │   │   ├── UserForm.jsx           # Form user (create/update)
 │   │   ├── UserProfile.jsx        # Profil user (dengan edit)
-│   │   └── UserPosts.jsx          # Postingan user
+│   │   ├── UserDetail.jsx         # Detail user dan edit
+│   │   └── UserManager.jsx        # Pengelola manajemen user
 │   ├── App.jsx                    # Komponen utama
 │   ├── main.jsx                   # Entry point
 │   └── index.css                  # Styling global
@@ -38,7 +41,8 @@ frontend/
 Frontend mengikuti prinsip component-based architecture dengan struktur sebagai berikut:
 
 ### 1. Komponen Utama
-- **App.jsx**: Komponen induk yang mengelola state login/logout
+- **App.jsx**: Komponen induk yang mengelola state login/logout dan menyediakan router
+- **AppRoutes.jsx**: Komponen yang mengelola semua route dan protected routes
 - **Layout.jsx**: Struktur layout utama aplikasi
 - **HeaderBar.jsx**: Header aplikasi dengan jam dan cuaca
 - **Sidebar.jsx**: Sidebar navigasi dengan informasi user
@@ -48,14 +52,28 @@ Frontend mengikuti prinsip component-based architecture dengan struktur sebagai 
 - **UserList.jsx**: Menampilkan daftar user
 - **UserForm.jsx**: Form untuk membuat/mengedit user
 - **UserProfile.jsx**: Menampilkan dan mengedit profil user
-- **UserPosts.jsx**: Menampilkan postingan user
+- **UserDetail.jsx**: Komponen untuk detail user dan edit
+- **UserManager.jsx**: Pengelola manajemen user (opsional)
+
+## Routing System
+Aplikasi menggunakan React Router DOM dengan route berikut:
+- `/` - Halaman utama (UserList)
+- `/users` - Daftar user (UserList)
+- `/users/list` - Daftar user (UserList)
+- `/users/create` - Form pembuatan user (UserForm)
+- `/users/:id/edit` - Form edit user (UserForm)
+- `/users/:id/profile` - Profil user (UserProfile)
+
+### Protected Routes
+- Semua route kecuali `/login` dilindungi oleh `ProtectedRoute`
+- Jika pengguna tidak login, akan diarahkan ke halaman login
 
 ## Alur Kerja
 
 ### 1. Startup
 1. Aplikasi dijalankan dengan `npm run dev`
 2. Vite menginisialisasi development server
-3. React app dimuat di browser
+3. React app dimuat di browser dengan BrowserRouter
 
 ### 2. Proses Login
 ```
@@ -72,11 +90,11 @@ Langkah-langkah:
 7. App merubah state menjadi logged in
 8. Tampilan berubah dari Login ke Dashboard
 
-### 3. Dashboard & Navigasi
-- Setelah login, menampilkan Layout dengan Sidebar dan Header
-- Sidebar menampilkan menu dan info user
-- Header menampilkan jam, cuaca, dan menu user
-- Komponen UserList, UserForm, UserProfile aktif
+### 3. Navigasi dengan Router
+- Setelah login, aplikasi menggunakan React Router untuk navigasi
+- Setiap URL sesuai dengan komponen tertentu
+- Pengguna dapat menggunakan tombol back/forward browser
+- Deep linking memungkinkan akses langsung ke halaman tertentu
 
 ### 4. Komunikasi API
 Semua komunikasi dengan backend menggunakan:
@@ -89,6 +107,7 @@ Semua komunikasi dengan backend menggunakan:
 - State login/logout dikelola di App.jsx
 - State form dan list dikelola di masing-masing komponen
 - Data user disimpan di localStorage
+- React Router menyediakan state untuk navigasi
 
 ## Fitur Utama
 
@@ -142,6 +161,11 @@ Semua komunikasi dengan backend menggunakan:
 - Mode view dan edit
 - Field-field profil lengkap
 
+### AppRoutes.jsx
+- Mengelola semua route aplikasi
+- Mengimplementasikan Protected Route
+- Menyediakan navigasi antar halaman
+
 ## Styling
 - Menggunakan Tailwind CSS untuk styling
 - Responsive design
@@ -174,6 +198,7 @@ Semua komunikasi dengan backend menggunakan:
 ### Dependency Utama
 - `react`: Library utama
 - `react-dom`: DOM renderer
+- `react-router-dom`: Library routing
 - `tailwindcss`: Framework CSS
 - `@tailwindcss/postcss`: Plugin PostCSS
 
@@ -181,6 +206,7 @@ Semua komunikasi dengan backend menggunakan:
 - Token disimpan di localStorage (untuk development)
 - Validasi input di sisi client
 - Sanitasi data sebelum dikirim ke backend
+- Protected routes untuk mencegah akses tidak sah
 
 ## Error Handling
 - Error boundary untuk komponen
