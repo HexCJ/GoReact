@@ -8,7 +8,7 @@ import (
 	"gin-user-api/internal/models"
 	"gin-user-api/internal/repositories"
 	"gin-user-api/internal/routes"
-
+	"gin-user-api/internal/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -27,6 +27,7 @@ func main() {
 		&models.Permission{},
 		&models.UserRole{},
 		&models.RolePermission{},
+		&models.Menu{},
 	)
 
 	userHandler := handlers.NewUserHandler(db)
@@ -34,6 +35,10 @@ func main() {
 	postHandler := handlers.NewPostHandler(db)
 	authHandler := handlers.NewAuthHandler(repositories.NewUserRepository(db))
 	rbacHandler := handlers.NewRBACController(db)
+	menuRepo := repositories.NewMenuRepository(db)
+	menuService := services.NewMenuService(menuRepo)
+	menuHandler := handlers.NewMenuHandler(menuService)
+
 
 	r := gin.Default()
 
@@ -49,7 +54,7 @@ func main() {
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})
-
+	
 	routes.RegisterRoutes(
 		r,
 		userHandler,
@@ -57,6 +62,7 @@ func main() {
 		postHandler,
 		*authHandler,
 		*rbacHandler,
+		*menuHandler,
 	)
 
 	log.Println("Server running at :8081")

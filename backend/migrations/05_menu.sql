@@ -1,0 +1,13 @@
+CREATE TABLE menu (
+  id SERIAL PRIMARY KEY,
+  nama_menu VARCHAR(100) NULL,
+  level_menu INTEGER NULL,
+  url_menu VARCHAR(255),
+  icon VARCHAR(100) NULL,
+  permission VARCHAR(100) NULL,
+  no_urut INTEGER NULL,
+  status_menu INTEGER NULL,
+  master_menu INTEGER NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

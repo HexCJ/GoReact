@@ -12,6 +12,7 @@ func RegisterRoutes(
 	postHandler handlers.PostHandler,
 	authHandler handlers.AuthHandler,
 	rbacHandler handlers.RBACController,
+	menuHandler handlers.MenuHandler,
 ) {
 	api := r.Group("/api")
 	{
@@ -66,6 +67,16 @@ func RegisterRoutes(
 			permissions.PUT("/:id", rbacHandler.UpdatePermission)
 			permissions.DELETE("/:id", rbacHandler.DeletePermission)
 		}
+
+		menus := api.Group("/menus")
+		{
+			menus.GET("", menuHandler.GetAll)
+			menus.POST("", menuHandler.Create)
+			menus.GET("/:id", menuHandler.GetByID)
+			menus.PUT("/:id", menuHandler.Update)
+			menus.DELETE("/:id", menuHandler.Delete)
+		}
+
 	}
 }
 
