@@ -14,11 +14,11 @@ func NewMenuRepository(db *gorm.DB) *MenuRepository {
 }
 
 func (r *MenuRepository) FindAll(menus *[]models.Menu) error {
-	return r.DB.Find(menus).Error
+	return r.DB.Preload("Permissions").Find(menus).Error
 }
 
 func (r *MenuRepository) FindByID(menu *models.Menu, id uint) error {
-	return r.DB.First(menu, id).Error
+	return r.DB.Preload("Permissions").First(menu, id).Error
 }
 
 func (r *MenuRepository) Create(menu *models.Menu) error {

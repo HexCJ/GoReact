@@ -55,7 +55,12 @@ func (h *MenuHandler) Create(c *gin.Context) {
 }
 
 func (h *MenuHandler) Update(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
 
 	var menu models.Menu
 	if err := c.ShouldBindJSON(&menu); err != nil {
@@ -68,8 +73,9 @@ func (h *MenuHandler) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, menu)
+	c.JSON(http.StatusOK, gin.H{"message": "Menu updated"})
 }
+
 
 func (h *MenuHandler) Delete(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
