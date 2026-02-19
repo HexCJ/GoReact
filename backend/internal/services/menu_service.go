@@ -3,9 +3,9 @@ package services
 import (
 	"gin-user-api/internal/models"
 	"gin-user-api/internal/repositories"
+	"gin-user-api/internal/dto"
 	"strings"
 	"gorm.io/gorm"
-	"errors"
 )
 
 type MenuService struct {
@@ -34,34 +34,34 @@ func formatMenuName(name string) string {
 	return name
 }
 
-
-func (s *MenuService) Create(menu *models.Menu) error {
+func (s *MenuService) Create(req dto.CreateMenuRequest) error {
 	return s.Repo.DB.Transaction(func(tx *gorm.DB) error {
 
-		permissions := menu.Permissions
-		menu.Permissions = nil 
+		menu := models.Menu{
+			NamaMenu: req.NamaMenu,
+			LevelMenu: req.LevelMenu,
+			ApiMenu: req.ApiMenu,
+			UrlMenu:  req.UrlMenu,
+			Icon: req.Icon,
+			NoUrut: req.NoUrut,
+			StatusMenu: req.StatusMenu,
+			MasterMenu: req.MasterMenu,
+		}
 
-		if err := tx.Create(menu).Error; err != nil {
+		if err := tx.Create(&menu).Error; err != nil {
 			return err
 		}
 
-		if menu.NamaMenu == nil {
-			return errors.New("nama_menu is required")
-		}
+		prefix := formatMenuName(req.NamaMenu)
 
-		prefix := formatMenuName(*menu.NamaMenu)
+		for _, p := range req.Permissions {
 
-
-		for i := range permissions {
-
-			permissions[i].ID = 0
-			permissions[i].MenuID = menu.ID
-
-			if !strings.HasPrefix(permissions[i].Nama, prefix+"-") {
-				permissions[i].Nama = prefix + "-" + permissions[i].Nama
+			permission := models.Permission{
+				Nama:   prefix + "-" + p.Nama,
+				MenuID: menu.ID,
 			}
 
-			if err := tx.Create(&permissions[i]).Error; err != nil {
+			if err := tx.Create(&permission).Error; err != nil {
 				return err
 			}
 		}
@@ -70,7 +70,8 @@ func (s *MenuService) Create(menu *models.Menu) error {
 	})
 }
 
-func (s *MenuService) Update(id uint, menu *models.Menu) error {
+
+func (s *MenuService) Update(id uint, req dto.UpdateMenuRequest) error {
 	return s.Repo.DB.Transaction(func(tx *gorm.DB) error {
 
 		var existing models.Menu
@@ -79,8 +80,14 @@ func (s *MenuService) Update(id uint, menu *models.Menu) error {
 		}
 
 		if err := tx.Model(&existing).Updates(models.Menu{
-			NamaMenu: menu.NamaMenu,
-			UrlMenu:  menu.UrlMenu,
+			NamaMenu: req.NamaMenu,
+			LevelMenu: req.LevelMenu,
+			ApiMenu: req.ApiMenu,
+			UrlMenu:  req.UrlMenu,
+			Icon: req.Icon,
+			NoUrut: req.NoUrut,
+			StatusMenu: req.StatusMenu,
+			MasterMenu: req.MasterMenu,
 		}).Error; err != nil {
 			return err
 		}
@@ -90,23 +97,16 @@ func (s *MenuService) Update(id uint, menu *models.Menu) error {
 			return err
 		}
 
-		if menu.NamaMenu == nil {
-			return errors.New("nama_menu is required")
-		}
+		prefix := formatMenuName(req.NamaMenu)
 
-		prefix := formatMenuName(*menu.NamaMenu)
+		for _, p := range req.Permissions {
 
-
-		for i := range menu.Permissions {
-
-			menu.Permissions[i].ID = 0
-			menu.Permissions[i].MenuID = id
-
-			if !strings.HasPrefix(menu.Permissions[i].Nama, prefix+"-") {
-				menu.Permissions[i].Nama = prefix + "-" + menu.Permissions[i].Nama
+			permission := models.Permission{
+				Nama:   prefix + "-" + p.Nama,
+				MenuID: id,
 			}
 
-			if err := tx.Create(&menu.Permissions[i]).Error; err != nil {
+			if err := tx.Create(&permission).Error; err != nil {
 				return err
 			}
 		}
@@ -114,6 +114,7 @@ func (s *MenuService) Update(id uint, menu *models.Menu) error {
 		return nil
 	})
 }
+
 
 
 

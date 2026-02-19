@@ -3,6 +3,7 @@ CREATE TABLE menu (
   nama_menu VARCHAR(100) NULL,
   level_menu INTEGER NULL,
   url_menu VARCHAR(255),
+  api_menu VARCHAR(255),
   icon VARCHAR(100) NULL,
   permission VARCHAR(100) NULL,
   no_urut INTEGER NULL,
