@@ -7,6 +7,9 @@ import RBACManagement from './RBACManagement';
 import MenuManagement from './MenuManagement';
 import MenuForm from './MenuForm';
 import MenuEdit from './MenuEdit';
+import RoleList from './RoleList';
+import RoleCreate from './RoleCreate';
+import RoleEdit from './RoleEdit';
 
 const AppRoutes = ({ isLoggedIn }) => {
   // Protected Route Component
@@ -84,6 +87,21 @@ const AppRoutes = ({ isLoggedIn }) => {
        <Route path="/menu/:id/edit" element={
         <ProtectedRoute>
           <MenuEdit />
+        </ProtectedRoute>
+      } />
+      <Route path="/roles" element={
+        <ProtectedRoute>
+          <RoleList />
+        </ProtectedRoute>
+      } />
+      <Route path="/roles/create" element={
+        <ProtectedRoute>
+          <RoleCreate />
+        </ProtectedRoute>
+      } />
+      <Route path="/roles/:id/edit" element={
+        <ProtectedRoute>
+          <RoleEdit />
         </ProtectedRoute>
       } />
     </Routes>

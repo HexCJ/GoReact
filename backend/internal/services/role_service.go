@@ -39,9 +39,9 @@ func (s *RoleService) Create(req dto.CreateRoleRequest) error {
 			return err
 		}
 
-		if len(req.Permissions) > 0 {
+		if len(req.PermissionIDs) > 0 {
 			var permissions []models.Permission
-			if err := tx.Where("id IN ?", req.Permissions).
+			if err := tx.Where("id IN ?", req.PermissionIDs).
 				Find(&permissions).Error; err != nil {
 				return err
 			}
@@ -73,8 +73,8 @@ func (s *RoleService) Update(id uint, req dto.UpdateRoleRequest) error {
 		}
 
 		var permissions []models.Permission
-		if len(req.Permissions) > 0 {
-			if err := tx.Where("id IN ?", req.Permissions).
+		if len(req.PermissionIDs) > 0 {
+			if err := tx.Where("id IN ?", req.PermissionIDs).
 				Find(&permissions).Error; err != nil {
 				return err
 			}

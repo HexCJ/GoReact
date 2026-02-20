@@ -1,15 +1,15 @@
 package dto
 
 type CreateRoleRequest struct {
-	Name        string `json:"name" binding:"required"`
+	Name        string  `json:"name" binding:"required"`
 	Description *string `json:"description"`
-	Permissions []uint `json:"permissions"` // permission IDs
+	PermissionIDs []uint `json:"permission_ids"`
 }
 
 type UpdateRoleRequest struct {
-	Name        string `json:"name" binding:"required"`
+	Name        string  `json:"name" binding:"required"`
 	Description *string `json:"description"`
-	Permissions []uint `json:"permissions"`
+	PermissionIDs []uint `json:"permission_ids"`
 }
 
 type RoleResponse struct {

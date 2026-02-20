@@ -11,6 +11,7 @@ const Sidebar = ({ isOpen, onClose, currentUser }) => {
     { id: 'rbac', label: 'RBAC', icon: '🔐', path: '/rbac' },
     { id: 'menu', label: 'Menu', icon: '📝', path: '/menu' },
     { id: 'settings', label: 'Settings', icon: '⚙️', path: '/users' },
+    { id: 'roles', label: 'Role', icon: '⚙️', path: '/roles' },
   ];
 
   const handleNavigation = (path) => {

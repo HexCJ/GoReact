@@ -35,7 +35,17 @@ func (h *RoleHandler) GetByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, role)
+	var permissionIDs []uint
+	for _, p := range role.Permissions {
+		permissionIDs = append(permissionIDs, p.ID)
+	}
+
+	c.JSON(200, gin.H{
+		"id":             role.ID,
+		"name":           role.Name,
+		"description":    role.Description,
+		"permission_ids": permissionIDs,
+	})
 }
 
 func (h *RoleHandler) Create(c *gin.Context) {
