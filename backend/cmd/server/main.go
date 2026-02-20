@@ -28,13 +28,16 @@ func main() {
 		&models.UserRole{},
 		&models.RolePermission{},
 		&models.Menu{},
+	    &models.RoleHasPermission{},
 	)
 
 	userHandler := handlers.NewUserHandler(db)
 	profileHandler := handlers.NewProfileHandler(db)
 	postHandler := handlers.NewPostHandler(db)
 	authHandler := handlers.NewAuthHandler(repositories.NewUserRepository(db))
-	rbacHandler := handlers.NewRBACController(db)
+	roleRepo := repositories.NewRoleRepository(db)
+	roleService := services.NewRoleService(roleRepo)
+	roleHandler := handlers.NewRoleHandler(roleService)
 	menuRepo := repositories.NewMenuRepository(db)
 	menuService := services.NewMenuService(menuRepo)
 	menuHandler := handlers.NewMenuHandler(menuService)
@@ -61,8 +64,8 @@ func main() {
 		profileHandler,
 		postHandler,
 		*authHandler,
-		*rbacHandler,
-		*menuHandler,
+		*menuHandler,   // ✅ benar
+		*roleHandler,
 	)
 
 	log.Println("Server running at :8081")

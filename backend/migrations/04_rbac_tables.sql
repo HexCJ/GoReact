@@ -1,2 +1,0 @@
--- Ini adalah file migrasi yang tidak digunakan lagi karena kami menggunakan format up/down
--- Silakan lihat file 04_rbac_tables.up.sql dan 04_rbac_tables.down.sql

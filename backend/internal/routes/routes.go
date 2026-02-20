@@ -11,8 +11,8 @@ func RegisterRoutes(
 	profileHandler handlers.ProfileHandler,
 	postHandler handlers.PostHandler,
 	authHandler handlers.AuthHandler,
-	rbacHandler handlers.RBACController,
 	menuHandler handlers.MenuHandler,
+	roleHandler handlers.RoleHandler,
 ) {
 	api := r.Group("/api")
 	{
@@ -36,36 +36,16 @@ func RegisterRoutes(
 			users.POST("/:id/posts", postHandler.CreatePost)
 			users.PUT("/:id/posts/:post_id", postHandler.UpdatePost)
 			users.DELETE("/:id/posts/:post_id", postHandler.DeletePost)
-			
-			// Route untuk RBAC - assign/remove role dari user
-			// Menggunakan path yang berbeda untuk menghindari konflik dengan route user
-			users.POST("/:id/assign-role/:role_id", rbacHandler.AssignRoleToUser)
-			users.DELETE("/:id/assign-role/:role_id", rbacHandler.RemoveRoleFromUser)
-			users.GET("/:id/roles", rbacHandler.GetUserRoles)
 		}
 
 		// Route untuk manajemen RBAC
 		roles := api.Group("/roles")
 		{
-			roles.GET("", rbacHandler.GetRoles)
-			roles.POST("", rbacHandler.CreateRole)
-			roles.GET("/:id", rbacHandler.GetRole)
-			roles.PUT("/:id", rbacHandler.UpdateRole)
-			roles.DELETE("/:id", rbacHandler.DeleteRole)
-			
-			// Route untuk manajemen permission di role
-			roles.POST("/:id/assign-permission/:permission_id", rbacHandler.AssignPermissionToRole)
-			roles.DELETE("/:id/assign-permission/:permission_id", rbacHandler.RemovePermissionFromRole)
-			roles.GET("/:id/permissions", rbacHandler.GetRolePermissions)
-		}
-
-		permissions := api.Group("/permissions")
-		{
-			permissions.GET("", rbacHandler.GetPermissions)
-			permissions.POST("", rbacHandler.CreatePermission)
-			permissions.GET("/:id", rbacHandler.GetPermission)
-			permissions.PUT("/:id", rbacHandler.UpdatePermission)
-			permissions.DELETE("/:id", rbacHandler.DeletePermission)
+			roles.GET("", roleHandler.GetAll)
+			roles.POST("", roleHandler.Create)
+			roles.GET("/:id", roleHandler.GetByID)
+			roles.PUT("/:id", roleHandler.Update)
+			roles.DELETE("/:id", roleHandler.Delete)
 		}
 
 		menus := api.Group("/menus")
