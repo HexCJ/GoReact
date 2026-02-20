@@ -14,11 +14,17 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (r *UserRepository) FindAll(users *[]models.User) error {
-	return r.DB.Preload("Profile").Preload("Posts").Find(users).Error
+	return r.DB.
+		Preload("Role").
+		Preload("Profile").
+		Preload("Posts").
+		Find(users).Error
 }
 
 func (r *UserRepository) FindByID(user *models.User, id uint) error {
-	return r.DB.First(user, id).Error
+	return r.DB.
+		Preload("Role").
+		First(user, id).Error
 }
 
 func (r *UserRepository) Create(user *models.User) error {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"gin-user-api/internal/models"
+	"gin-user-api/internal/dto"
 	"gin-user-api/internal/services"
 	"gin-user-api/internal/repositories" 
 	"github.com/gin-gonic/gin"
@@ -23,72 +23,92 @@ func NewUserHandler(db *gorm.DB) UserHandler {
 }
 
 func (h *UserHandler) GetUsers(c *gin.Context) {
-	var users []models.User
-	if err := h.Service.GetAll(&users); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+	users, err := h.Service.GetAll()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, users)
+
+	var response []dto.UserResponse
+
+	for _, u := range users {
+		resp := dto.UserResponse{
+			ID:    u.ID,
+			Name:  u.Name,
+			Email: u.Email,
+		}
+
+		resp.Role.ID = u.Role.ID
+		resp.Role.Name = u.Role.Name
+
+		response = append(response, resp)
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 func (h *UserHandler) GetUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	var user models.User
 
-	if err := h.Service.GetByID(&user, uint(id)); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+	user, err := h.Service.GetByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	resp := dto.UserResponse{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	resp.Role.ID = user.Role.ID
+	resp.Role.Name = user.Role.Name
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var user models.User
+	var req dto.CreateUserRequest
 
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	if user.Password == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "password wajib diisi"})
+	if err := h.Service.Create(req); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := h.Service.Create(&user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-		return
-	}
-
-	user.Password = "" 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(201, gin.H{"message": "User created"})
 }
 
 
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	var user models.User
 
-	if err := h.Service.GetByID(&user, uint(id)); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+	var req dto.UpdateUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.ShouldBindJSON(&user)
-	h.Service.Update(&user)
-	c.JSON(http.StatusOK, user)
+	if err := h.Service.Update(uint(id), req); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "User updated"})
 }
 
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	var user models.User
 
-	if err := h.Service.GetByID(&user, uint(id)); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+	if err := h.Service.Delete(uint(id)); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	h.Service.Delete(&user)
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted"})
+	c.JSON(200, gin.H{"message": "User deleted"})
 }

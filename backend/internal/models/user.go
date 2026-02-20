@@ -10,7 +10,8 @@
 
 		Profile Profile 	`json:"profile" gorm:"foreignKey:UserID;references:ID"`
 		Posts   []Post  	`json:"posts" gorm:"foreignKey:UserID"`
-		Roles   []Role      `json:"roles" gorm:"many2many:user_roles;"`
+		RoleID uint
+		Role   Role `gorm:"foreignKey:RoleID"`
 
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`
