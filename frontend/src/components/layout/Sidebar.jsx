@@ -9,7 +9,7 @@ const Sidebar = ({ isOpen, onClose, currentUser }) => {
     { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/' },
     { id: 'users', label: 'Users', icon: '👥', path: '/users' },
     { id: 'rbac', label: 'RBAC', icon: '🔐', path: '/rbac' },
-    { id: 'posts', label: 'Posts', icon: '📝', path: '/users' },
+    { id: 'menu', label: 'Menu', icon: '📝', path: '/menu' },
     { id: 'settings', label: 'Settings', icon: '⚙️', path: '/users' },
   ];
 

@@ -23,10 +23,10 @@ func (h *MenuHandler) GetAll(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	var response []dto.MenuResponse
+	response := make([]dto.MenuResponse, 0)
 
 	for _, m := range menus {
+
 		menuResp := dto.MenuResponse{
 			ID:         m.ID,
 			NamaMenu:   m.NamaMenu,
@@ -37,6 +37,7 @@ func (h *MenuHandler) GetAll(c *gin.Context) {
 			NoUrut:     m.NoUrut,
 			StatusMenu: m.StatusMenu,
 			MasterMenu: m.MasterMenu,
+			Permissions: make([]dto.PermissionResponse, 0), 
 		}
 
 		for _, p := range m.Permissions {
@@ -51,6 +52,7 @@ func (h *MenuHandler) GetAll(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
 
 
 func (h *MenuHandler) GetByID(c *gin.Context) {

@@ -4,7 +4,6 @@ import (
 	"gin-user-api/internal/models"
 	"gin-user-api/internal/repositories"
 	"gin-user-api/internal/dto"
-	"strings"
 	"gorm.io/gorm"
 )
 
@@ -28,12 +27,6 @@ func (s *MenuService) GetByID(id uint) (models.Menu, error) {
 	return menu, err
 }
 
-func formatMenuName(name string) string {
-	name = strings.ToLower(name)
-	name = strings.ReplaceAll(name, " ", "_")
-	return name
-}
-
 func (s *MenuService) Create(req dto.CreateMenuRequest) error {
 	return s.Repo.DB.Transaction(func(tx *gorm.DB) error {
 
@@ -52,12 +45,11 @@ func (s *MenuService) Create(req dto.CreateMenuRequest) error {
 			return err
 		}
 
-		prefix := formatMenuName(req.NamaMenu)
 
 		for _, p := range req.Permissions {
 
 			permission := models.Permission{
-				Nama:   prefix + "-" + p.Nama,
+				Nama:   	p.Nama,
 				MenuID: menu.ID,
 			}
 
@@ -97,12 +89,10 @@ func (s *MenuService) Update(id uint, req dto.UpdateMenuRequest) error {
 			return err
 		}
 
-		prefix := formatMenuName(req.NamaMenu)
-
 		for _, p := range req.Permissions {
 
 			permission := models.Permission{
-				Nama:   prefix + "-" + p.Nama,
+				Nama:   p.Nama,
 				MenuID: id,
 			}
 
