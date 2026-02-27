@@ -12,6 +12,8 @@ const UserDetail = () => {
   useEffect(() => {
     if (id && id !== 'create') {
       fetchUser();
+    } else {
+      setLoading(false);
     }
   }, [id]);
 
