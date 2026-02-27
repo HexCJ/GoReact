@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const RoleEdit = () => {
-  const { id } = useParams();
+const RoleAdd = () => {
   const navigate = useNavigate();
 
   const [menus, setMenus] = useState([]);
@@ -15,7 +14,6 @@ const RoleEdit = () => {
 
   useEffect(() => {
     fetchMenus();
-    fetchRole();
   }, []);
 
   const fetchMenus = async () => {
@@ -24,33 +22,21 @@ const RoleEdit = () => {
     setMenus(data || []);
   };
 
-  const fetchRole = async () => {
-    const res = await fetch(`http://127.0.0.1:8081/api/roles/${id}`);
-    const data = await res.json();
-
-    setForm({
-      name: data.name,
-      description: data.description,
-    });
-
-    setSelectedPermissions(data.permission_ids || []);
-  };
-
-  const togglePermission = (pid) => {
-    if (selectedPermissions.includes(pid)) {
+  const togglePermission = (id) => {
+    if (selectedPermissions.includes(id)) {
       setSelectedPermissions(
-        selectedPermissions.filter((p) => p !== pid)
+        selectedPermissions.filter((p) => p !== id)
       );
     } else {
-      setSelectedPermissions([...selectedPermissions, pid]);
+      setSelectedPermissions([...selectedPermissions, id]);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch(`http://127.0.0.1:8081/api/roles/${id}`, {
-      method: "PUT",
+    await fetch("http://127.0.0.1:8081/api/roles", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: form.name,
@@ -59,32 +45,32 @@ const RoleEdit = () => {
       }),
     });
 
-    alert("Role updated successfully");
     navigate("/roles");
   };
 
   return (
-    <div className="bg-white shadow p-6 rounded max-w-4xl mx-auto">
-      <h2 className="text-xl mb-4 font-semibold">Edit Role</h2>
+    <div className="bg-white shadow rounded p-6 max-w-4xl mx-auto">
+      <h2 className="text-xl font-semibold mb-4">Create Role</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+
         <input
-          value={form.name}
+          placeholder="Role Name"
+          className="w-full border p-2 rounded"
           onChange={(e) =>
             setForm({ ...form, name: e.target.value })
           }
-          className="w-full border p-2 rounded"
         />
 
         <textarea
-          value={form.description}
+          placeholder="Description"
+          className="w-full border p-2 rounded"
           onChange={(e) =>
             setForm({ ...form, description: e.target.value })
           }
-          className="w-full border p-2 rounded"
         />
 
-        {/* MENU GROUP */}
+        {/* MENU + PERMISSION GRID */}
         <div className="grid grid-cols-2 gap-6">
           {menus.map((menu) => (
             <div key={menu.id} className="border p-4 rounded">
@@ -100,7 +86,9 @@ const RoleEdit = () => {
                   <input
                     type="checkbox"
                     checked={selectedPermissions.includes(perm.id)}
-                    onChange={() => togglePermission(perm.id)}
+                    onChange={() =>
+                      togglePermission(perm.id)
+                    }
                   />
                   <span>{perm.nama}</span>
                 </label>
@@ -109,12 +97,12 @@ const RoleEdit = () => {
           ))}
         </div>
 
-        <button className="bg-yellow-600 text-white px-4 py-2 rounded">
-          Update
+        <button className="bg-green-600 text-white px-4 py-2 rounded">
+          Save Role
         </button>
       </form>
     </div>
   );
 };
 
-export default RoleEdit;
+export default RoleAdd;

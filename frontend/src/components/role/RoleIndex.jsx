@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeleteModal from "../components/DeleteModal";
+import DeleteModal from "../common/DeleteModal";
 
-const RoleList = () => {
+const RoleIndex = () => {
   const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
@@ -85,4 +85,4 @@ const RoleList = () => {
   );
 };
 
-export default RoleList;
+export default RoleIndex;

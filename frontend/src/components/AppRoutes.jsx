@@ -1,109 +1,28 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import UserList from './UserList';
-import UserForm from './UserForm';
-import UserProfile from './UserProfile';
-import UserDetail from './UserDetail';
-import RBACManagement from './RBACManagement';
-import MenuManagement from './MenuManagement';
-import MenuForm from './MenuForm';
-import MenuEdit from './MenuEdit';
-import RoleList from './RoleList';
-import RoleCreate from './RoleCreate';
-import RoleEdit from './RoleEdit';
+import { userRoutes } from '../routes/userRoutes';
+import { menuRoutes } from '../routes/menuRoutes';
+import { roleRoutes } from '../routes/roleRoutes';
 
 const AppRoutes = ({ isLoggedIn }) => {
-  // Protected Route Component
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/login" />;
   };
 
+  const createProtectedRoutes = (routes) => {
+    return routes.map((route, index) => (
+      <Route
+        key={index}
+        path={route.path}
+        element={<ProtectedRoute>{route.element}</ProtectedRoute>}
+      />
+    ));
+  };
+
   return (
     <Routes>
-      <Route path="/" element={
-        <ProtectedRoute>
-          <UserList />
-        </ProtectedRoute>
-      } />
-      <Route path="/users" element={
-        <ProtectedRoute>
-          <UserList />
-        </ProtectedRoute>
-      } />
-      <Route path="/users/list" element={
-        <ProtectedRoute>
-          <UserList />
-        </ProtectedRoute>
-      } />
-      <Route path="/users/create" element={
-        <ProtectedRoute>
-          <UserDetail />
-        </ProtectedRoute>
-      } />
-      <Route path="/users/:id/edit" element={
-        <ProtectedRoute>
-          <UserDetail />
-        </ProtectedRoute>
-      } />
-      <Route path="/users/:id/profile" element={
-        <ProtectedRoute>
-          <UserProfile />
-        </ProtectedRoute>
-      } />
-      <Route path="/rbac" element={
-        <ProtectedRoute>
-          <RBACManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/rbac/roles" element={
-        <ProtectedRoute>
-          <RBACManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/rbac/permissions" element={
-        <ProtectedRoute>
-          <RBACManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/rbac/role-permissions" element={
-        <ProtectedRoute>
-          <RBACManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/rbac/user-roles" element={
-        <ProtectedRoute>
-          <RBACManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/menu" element={
-        <ProtectedRoute>
-          <MenuManagement />
-        </ProtectedRoute>
-      } />
-      <Route path="/menu/create" element={
-        <ProtectedRoute>
-          <MenuForm />
-        </ProtectedRoute>
-      } />
-       <Route path="/menu/:id/edit" element={
-        <ProtectedRoute>
-          <MenuEdit />
-        </ProtectedRoute>
-      } />
-      <Route path="/roles" element={
-        <ProtectedRoute>
-          <RoleList />
-        </ProtectedRoute>
-      } />
-      <Route path="/roles/create" element={
-        <ProtectedRoute>
-          <RoleCreate />
-        </ProtectedRoute>
-      } />
-      <Route path="/roles/:id/edit" element={
-        <ProtectedRoute>
-          <RoleEdit />
-        </ProtectedRoute>
-      } />
+      {createProtectedRoutes(userRoutes)}
+      {createProtectedRoutes(menuRoutes)}
+      {createProtectedRoutes(roleRoutes)}
     </Routes>
   );
 };

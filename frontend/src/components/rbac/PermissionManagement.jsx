@@ -40,12 +40,12 @@ const PermissionManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const token = localStorage.getItem('token');
       const method = editingPermission ? 'PUT' : 'POST';
       const url = editingPermission ? `/api/permissions/${editingPermission.id}` : '/api/permissions';
-      
+
       const response = await fetch(url, {
         method: method,
         headers: {
@@ -54,19 +54,19 @@ const PermissionManagement = () => {
         },
         body: JSON.stringify(formData)
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const savedPermission = await response.json();
-      
+
       if (editingPermission) {
         setPermissions(permissions.map(permission => permission.id === savedPermission.id ? savedPermission : permission));
       } else {
         setPermissions([...permissions, savedPermission]);
       }
-      
+
       setFormData({ name: '', description: '', action: '', resource: '' });
       setShowForm(false);
       setEditingPermission(null);
@@ -77,8 +77,8 @@ const PermissionManagement = () => {
 
   const handleEdit = (permission) => {
     setEditingPermission(permission);
-    setFormData({ 
-      name: permission.name, 
+    setFormData({
+      name: permission.name,
       description: permission.description,
       action: permission.action,
       resource: permission.resource
@@ -96,11 +96,11 @@ const PermissionManagement = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         setPermissions(permissions.filter(permission => permission.id !== permissionId));
       } catch (err) {
         console.error('Error deleting permission:', err);
@@ -147,7 +147,7 @@ const PermissionManagement = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="action" className="block text-sm font-medium text-gray-700 mb-1">
                   Action
@@ -162,7 +162,7 @@ const PermissionManagement = () => {
                 />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label htmlFor="resource" className="block text-sm font-medium text-gray-700 mb-1">
@@ -177,7 +177,7 @@ const PermissionManagement = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                   Description
@@ -192,7 +192,7 @@ const PermissionManagement = () => {
                 />
               </div>
             </div>
-            
+
             <div className="flex space-x-2">
               <button
                 type="submit"
@@ -200,7 +200,7 @@ const PermissionManagement = () => {
               >
                 {editingPermission ? 'Update' : 'Create'}
               </button>
-              
+
               <button
                 type="button"
                 onClick={() => {

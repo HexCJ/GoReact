@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DeleteModal from '../components/DeleteModal';
+import DeleteModal from '../common/DeleteModal';
 
-const MenuList = ({ onSelectMenu, onCreateMenu }) => {
+const MenuIndex = ({ onSelectMenu, onCreateMenu }) => {
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -168,4 +168,4 @@ const MenuList = ({ onSelectMenu, onCreateMenu }) => {
   );
 };
 
-export default MenuList;
+export default MenuIndex;

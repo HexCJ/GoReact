@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 const UserProfile = ({ userId }) => {
-  const [profile, setProfile] = useState({ 
-    phone: '', 
+  const [profile, setProfile] = useState({
+    phone: '',
     address: '',
     bio: '',
     website: '',
@@ -23,8 +23,8 @@ const UserProfile = ({ userId }) => {
       const response = await fetch(`/api/users/${userId}/profile`);
       if (response.status === 404) {
         // Profile doesn't exist yet, set empty profile
-        setProfile({ 
-          phone: '', 
+        setProfile({
+          phone: '',
           address: '',
           bio: '',
           website: '',

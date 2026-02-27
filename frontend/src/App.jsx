@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Navigate } from 'react-router-dom';
-import Login from './components/Login';
+import Login from './components/common/Login';
 import AppRoutes from './components/AppRoutes';
 import Layout from './components/layout/Layout';
 import './App.css';

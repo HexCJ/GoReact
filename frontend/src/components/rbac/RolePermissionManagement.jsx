@@ -14,7 +14,7 @@ const RolePermissionManagement = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
-      
+
       // Fetch roles
       const rolesResponse = await fetch('/api/roles', {
         headers: {
@@ -24,7 +24,7 @@ const RolePermissionManagement = () => {
       if (!rolesResponse.ok) throw new Error(`HTTP error! status: ${rolesResponse.status}`);
       const rolesData = await rolesResponse.json();
       setRoles(rolesData);
-      
+
       // Fetch permissions
       const permissionsResponse = await fetch('/api/permissions', {
         headers: {
@@ -34,7 +34,7 @@ const RolePermissionManagement = () => {
       if (!permissionsResponse.ok) throw new Error(`HTTP error! status: ${permissionsResponse.status}`);
       const permissionsData = await permissionsResponse.json();
       setPermissions(permissionsData);
-      
+
       setLoading(false);
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -52,13 +52,13 @@ const RolePermissionManagement = () => {
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      
+
       // Convert to map for easier lookup
       const permissionMap = {};
       data.forEach(p => {
         permissionMap[p.id] = true;
       });
-      
+
       setRolePermissions(prev => ({
         ...prev,
         [roleId]: permissionMap
@@ -71,7 +71,7 @@ const RolePermissionManagement = () => {
   const handleRoleChange = (e) => {
     const roleId = e.target.value;
     setSelectedRole(roleId);
-    
+
     // Fetch permissions for this role if not already loaded
     if (!rolePermissions[roleId]) {
       fetchRolePermissions(roleId);
@@ -83,7 +83,7 @@ const RolePermissionManagement = () => {
       const token = localStorage.getItem('token');
       const rolePerm = rolePermissions[roleId] || {};
       const hasPermission = !!rolePerm[permissionId];
-      
+
       let response;
       if (hasPermission) {
         // Remove permission from role
@@ -102,9 +102,9 @@ const RolePermissionManagement = () => {
           }
         });
       }
-      
+
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       // Update local state
       setRolePermissions(prev => {
         const newRolePerm = { ...prev };
@@ -146,15 +146,15 @@ const RolePermissionManagement = () => {
           <h3 className="text-lg font-medium text-gray-800 mb-4">
             Permissions for: {roles.find(r => r.id === parseInt(selectedRole))?.name}
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {permissions.map(permission => {
               const rolePerm = rolePermissions[selectedRole] || {};
               const hasPermission = !!rolePerm[permission.id];
-              
+
               return (
-                <div 
-                  key={permission.id} 
+                <div
+                  key={permission.id}
                   className={`p-3 border rounded-md flex items-center ${
                     hasPermission ? 'bg-green-50 border-green-300' : 'bg-gray-50 border-gray-300'
                   }`}
@@ -166,8 +166,8 @@ const RolePermissionManagement = () => {
                     onChange={() => togglePermission(parseInt(selectedRole), permission.id)}
                     className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
                   />
-                  <label 
-                    htmlFor={`perm-${permission.id}`} 
+                  <label
+                    htmlFor={`perm-${permission.id}`}
                     className="ml-2 text-sm font-medium text-gray-700"
                   >
                     <span className="font-semibold">{permission.name}</span>

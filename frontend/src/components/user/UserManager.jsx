@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import UserList from './UserList';
-import UserForm from './UserForm';
+import UserIndex from './UserIndex';
+import UserAdd from './UserAdd';
 import UserProfile from './UserProfile';
 
 const UserManager = () => {
@@ -37,13 +37,13 @@ const UserManager = () => {
     switch (currentView) {
       case 'list':
         return (
-          <UserList 
-            onSelectUser={handleSelectUser} 
-            onCreateUser={handleCreateUser} 
+          <UserIndex
+            onSelectUser={handleSelectUser}
+            onCreateUser={handleCreateUser}
           />
         );
       case 'create':
-        return <UserForm onSave={handleSaveUser} onCancel={handleCancel} />;
+        return <UserAdd onSave={handleSaveUser} onCancel={handleCancel} />;
       case 'edit':
         return (
           <div>
@@ -55,12 +55,12 @@ const UserManager = () => {
                 Back to List
               </button>
             </div>
-            <UserForm user={selectedUser} onSave={handleSaveUser} onCancel={handleCancel} />
+            <UserAdd user={selectedUser} onSave={handleSaveUser} onCancel={handleCancel} />
             <UserProfile userId={selectedUser?.id} />
           </div>
         );
       default:
-        return <UserList onSelectUser={handleSelectUser} />;
+        return <UserIndex onSelectUser={handleSelectUser} />;
     }
   };
 

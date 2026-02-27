@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MenuForm = () => {
+const MenuAdd = () => {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
@@ -189,4 +189,4 @@ const MenuForm = () => {
   );
 };
 
-export default MenuForm;
+export default MenuAdd;

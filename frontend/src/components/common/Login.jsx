@@ -32,7 +32,7 @@ const Login = ({ onLogin }) => {
       }
 
       const data = await response.json();
-      
+
       // Simpan token atau informasi pengguna ke localStorage/sessionStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -65,7 +65,7 @@ const Login = ({ onLogin }) => {
               </div>
             </div>
           )}
-          
+
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="username" className="sr-only">

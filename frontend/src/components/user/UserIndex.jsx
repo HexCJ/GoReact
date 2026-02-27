@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserList = ({ onSelectUser, onCreateUser }) => {
+const UserIndex = ({ onSelectUser, onCreateUser }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -106,4 +106,4 @@ const UserList = ({ onSelectUser, onCreateUser }) => {
   );
 };
 
-export default UserList;
+export default UserIndex;

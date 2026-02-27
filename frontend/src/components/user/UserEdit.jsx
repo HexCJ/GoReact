@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import UserForm from './UserForm';
+import UserAdd from './UserAdd';
 import UserProfile from './UserProfile';
 
-const UserDetail = () => {
+const UserEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -44,7 +44,7 @@ const UserDetail = () => {
   if (loading) return <div className="p-4">Loading...</div>;
 
   if (id === 'create') {
-    return <UserForm onSave={handleSave} onCancel={handleCancel} />;
+    return <UserAdd onSave={handleSave} onCancel={handleCancel} />;
   }
 
   return (
@@ -57,10 +57,10 @@ const UserDetail = () => {
           Back to List
         </button>
       </div>
-      <UserForm user={user} onSave={handleSave} onCancel={handleCancel} />
+      <UserAdd user={user} onSave={handleSave} onCancel={handleCancel} />
       <UserProfile userId={user?.id} />
     </div>
   );
 };
 
-export default UserDetail;
+export default UserEdit;

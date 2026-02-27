@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const UserForm = ({ user: propUser, onSave, onCancel }) => {
+const UserAdd = ({ user: propUser, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -248,4 +248,4 @@ const UserForm = ({ user: propUser, onSave, onCancel }) => {
   );
 };
 
-export default UserForm;
+export default UserAdd;

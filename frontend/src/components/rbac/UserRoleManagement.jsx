@@ -14,7 +14,7 @@ const UserRoleManagement = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
-      
+
       // Fetch users
       const usersResponse = await fetch('/api/users', {
         headers: {
@@ -24,7 +24,7 @@ const UserRoleManagement = () => {
       if (!usersResponse.ok) throw new Error(`HTTP error! status: ${usersResponse.status}`);
       const usersData = await usersResponse.json();
       setUsers(usersData);
-      
+
       // Fetch roles
       const rolesResponse = await fetch('/api/roles', {
         headers: {
@@ -34,7 +34,7 @@ const UserRoleManagement = () => {
       if (!rolesResponse.ok) throw new Error(`HTTP error! status: ${rolesResponse.status}`);
       const rolesData = await rolesResponse.json();
       setRoles(rolesData);
-      
+
       setLoading(false);
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -52,13 +52,13 @@ const UserRoleManagement = () => {
       });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      
+
       // Convert to map for easier lookup
       const roleMap = {};
       data.forEach(r => {
         roleMap[r.id] = true;
       });
-      
+
       setUserRoles(prev => ({
         ...prev,
         [userId]: roleMap
@@ -71,7 +71,7 @@ const UserRoleManagement = () => {
   const handleUserChange = (e) => {
     const userId = e.target.value;
     setSelectedUser(userId);
-    
+
     // Fetch roles for this user if not already loaded
     if (!userRoles[userId]) {
       fetchUserRoles(userId);
@@ -83,7 +83,7 @@ const UserRoleManagement = () => {
       const token = localStorage.getItem('token');
       const userRole = userRoles[userId] || {};
       const hasRole = !!userRole[roleId];
-      
+
       let response;
       if (hasRole) {
         // Remove role from user
@@ -102,9 +102,9 @@ const UserRoleManagement = () => {
           }
         });
       }
-      
+
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       // Update local state
       setUserRoles(prev => {
         const newUserRole = { ...prev };
@@ -146,15 +146,15 @@ const UserRoleManagement = () => {
           <h3 className="text-lg font-medium text-gray-800 mb-4">
             Roles for: {users.find(u => u.id === parseInt(selectedUser))?.name}
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {roles.map(role => {
               const userRole = userRoles[selectedUser] || {};
               const hasRole = !!userRole[role.id];
-              
+
               return (
-                <div 
-                  key={role.id} 
+                <div
+                  key={role.id}
                   className={`p-3 border rounded-md flex items-center ${
                     hasRole ? 'bg-green-50 border-green-300' : 'bg-gray-50 border-gray-300'
                   }`}
@@ -166,8 +166,8 @@ const UserRoleManagement = () => {
                     onChange={() => toggleUserRole(parseInt(selectedUser), role.id)}
                     className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
                   />
-                  <label 
-                    htmlFor={`role-${role.id}`} 
+                  <label
+                    htmlFor={`role-${role.id}`}
                     className="ml-2 text-sm font-medium text-gray-700"
                   >
                     <span className="font-semibold">{role.name}</span>
