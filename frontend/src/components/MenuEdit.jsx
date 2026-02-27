@@ -118,7 +118,7 @@ const MenuEdit = () => {
       setSuccess(true);
 
         setTimeout(() => {
-        navigate("/menu");
+        navigate("/menu", { state: { refresh: true } });
         }, 1500);
 
     } catch (err) {
